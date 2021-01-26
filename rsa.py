@@ -5,23 +5,32 @@ Sujet de type : cryptographie (RSA et fonction de hashage)
 import random
 
 def generecle(tailleenbit=1024):
-    p = 23
-    q = 19
-    n = p*q
-    phiN = (p-1)*(q-1)
-    #On choisit e 
-    
+    #p = 23
+    #q = 19   
     #On génère nos deux nombre premiers.
     p = grandnombrepremier(tailleenbit)
     q = grandnombrepremier(tailleenbit)
-
-
-
-def pgcd(p,q):
+    print("p = ", p)
+    print("q = ",q)
+    n = p*q
+    phiN = (p-1)*(q-1)
+    #choisir e
+    # e est premier avec phiN
+    while True:
+        e = random.randrange(2 ** (tailleenbit - 1), 2 ** tailleenbit - 1)
+        if(coprem(e,phiN)):
+            break
+    print("e = ",e)
+    print("phiN = ",phiN)
+    
+def inversemodule(e,phiN):
     
 
 def coprem(p,q):
-    return pgcd(p,q)==1
+    #On retourne True si le pgcd vaut 1
+    while q:
+        p, q = q, p%q
+    return p 
 
 
 def estpremier(nombre):
@@ -35,8 +44,8 @@ def estpremier(nombre):
                 return False       #si un des premiers divise notre liste
     return True #si le nombre passe tout les tests on a de grandes chances qu'il soit premier
     
+def cryptage(msg,e,n):
     
-
 
 
 def grandnombrepremier(tailleenbit=1024): #mettre une taille de 1024 bit si pas de taille de clé donnée
@@ -47,6 +56,7 @@ def grandnombrepremier(tailleenbit=1024): #mettre une taille de 1024 bit si pas 
 
 def main():
     tailleenbit = int(input("Taille de votre clé : "))
-    print(p)
-    print(q)
+    generecle(tailleenbit)
+    
+main()
 
