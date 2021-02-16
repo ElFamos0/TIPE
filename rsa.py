@@ -20,17 +20,40 @@ def generecle(tailleenbit=1024):
         e = random.randrange(2 ** (tailleenbit - 1), 2 ** tailleenbit - 1)
         if(coprem(e,phiN)):
             break
+    d = inversemodule(e,phiN)
     print("e = ",e)
     print("phiN = ",phiN)
+    print("d = ",d)
+    return e,d,n
     
 def inversemodule(e,phiN):
+    pgcd, x, y = euclideetendu(e,phiN)
     
+    if x < 0:
+        x += phiN
+    return x
+    
+def euclideetendu(a,b): #cf algo euclide étendue sur wikipédia 
+    r = b 
+    rr = a
+    u = 0
+    uu = 1 
+    v = 0
+    vv = 1 
+    while r != 0:
+        q = rr//r
+        rr, r = r, rr - q*r
+        uu, u = u, uu - q*u
+        vv, v = v, vv - q*v
+    
+    return rr, uu, vv
 
+    
 def coprem(p,q):
     #On retourne True si le pgcd vaut 1
     while q:
         p, q = q, p%q
-    return p 
+    return p == 1
 
 
 def estpremier(nombre):
@@ -45,9 +68,21 @@ def estpremier(nombre):
     return True #si le nombre passe tout les tests on a de grandes chances qu'il soit premier
     
 def cryptage(msg,e,n):
+    crypte = ""
+    for c in msg:
+        m = ord(c)
+        crypte += str(pow(m,e,n)) + " " #afin de pouvoir plus simplement diviser quand on voudra déchiffrer
+    return crypte
     
-
-
+def decryptage(crypte,d,n):
+    msg = ""
+    crypte2 = crypte.split()
+    for c in crypte2:
+        m = int(c)
+        msg += chr(pow(m,d,n))
+    return msg
+    
+        
 def grandnombrepremier(tailleenbit=1024): #mettre une taille de 1024 bit si pas de taille de clé donnée
     while True:
         nombre = random.randrange(2**(tailleenbit-1),(2**tailleenbit)-1) #permet d'avoir un nombre entre 308 et 309 chiffres
@@ -56,7 +91,13 @@ def grandnombrepremier(tailleenbit=1024): #mettre une taille de 1024 bit si pas 
 
 def main():
     tailleenbit = int(input("Taille de votre clé : "))
-    generecle(tailleenbit)
+    e,d,n = generecle(tailleenbit)
+    msg = "bonjour"
+
+    crypt = cryptage(msg,e, n)
+    dec = decryptage(crypt,d, n)
+    print(crypt)
+    print(dec)
     
 main()
 
