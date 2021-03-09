@@ -73,8 +73,18 @@ def cryptage(msg,e,n):
         m = ord(c)
         crypte += str(pow(m,e,n)) + " " #afin de pouvoir plus simplement diviser quand on voudra déchiffrer
     return crypte
+
+def cryptage2(msg,e,n):
+    crypte = ''
+    erreur = len(msg)%10 
+    for c in range(len(msg)):
+        m = ord(msg[c])
+        a = str(bin(m))
+        crypte += a
+    print(str(crypte))
     
 def decryptage(crypte,d,n):
+    global a, b, c
     msg = ""
     crypte2 = crypte.split()
     for c in crypte2:
@@ -89,15 +99,14 @@ def grandnombrepremier(tailleenbit=1024): #mettre une taille de 1024 bit si pas 
         if (estpremier(nombre)):
             return nombre
 
-def main():
+if __name__ == '__main__':
     tailleenbit = int(input("Taille de votre clé : "))
     e,d,n = generecle(tailleenbit)
     msg = "bonjour"
+    msg = "01100010011011110110111001101010011011110111010101110010"
 
     crypt = cryptage(msg,e, n)
     dec = decryptage(crypt,d, n)
     print(crypt)
     print(dec)
-    
-main()
 
