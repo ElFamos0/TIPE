@@ -75,14 +75,33 @@ def cryptage(msg,e,n):
     return crypte
 
 def cryptage2(msg,e,n):
-    crypte = ''
-    erreur = len(msg)%10 
-    for c in range(len(msg)):
-        m = ord(msg[c])
-        a = str(bin(m))
-        crypte += a
-    print(str(crypte))
+    n = len(msg)
+    listecryptage = []
+    listecrypte=[]
+    listecrypteRSA=[]
+    for i in range(n//10):
+        listecryptage.append(msg[i*10:(i+1)*10])
+    listecryptage.append(msg[n-n%10:n])
+    print(listecryptage)
+    for item in listecryptage:
+        somme = 0
+        for indices in range(len(item)):
+            somme += ord(item[indices])*2**(8*(9-indices))
+        listecrypte.append(somme)
+    for item in listecrypte:
+        listecrypteRSA.append(pow(item,e,n))
+    return listecrypteRSA
     
+
+def cryptage3(msg,e,n):
+    l = [x for x in bytes(msg, encoding="utf8")]
+    listecryptage = []
+    for i in range(n//10):
+        
+    
+    
+    return listecryptage
+
 def decryptage(crypte,d,n):
     global a, b, c
     msg = ""
@@ -92,6 +111,16 @@ def decryptage(crypte,d,n):
         msg += chr(pow(m,d,n))
     return msg
     
+# def decryptage2(crypte,d,n): #Mauvaise tentatve 
+#     decrypte = []
+#     for item in crypte:
+#         decrypte.append(pow(item,d,n)
+#     for item in decrypte:
+#         for i in range(10):
+#             lettre = chr(item//2**(10-i))
+#             decrypte += lettre
+#             item -= (item//2**(10-i)) * 2**(10-i)
+#     return decrypte
         
 def grandnombrepremier(tailleenbit=1024): #mettre une taille de 1024 bit si pas de taille de clé donnée
     while True:
@@ -103,10 +132,10 @@ if __name__ == '__main__':
     tailleenbit = int(input("Taille de votre clé : "))
     e,d,n = generecle(tailleenbit)
     msg = "bonjour"
-    msg = "01100010011011110110111001101010011011110111010101110010"
 
-    crypt = cryptage(msg,e, n)
-    dec = decryptage(crypt,d, n)
+    crypt = cryptage2(msg,e, n)
     print(crypt)
-    print(dec)
+    #○dec = decryptage2(crypt,d, n)
+    #print(crypt)
+    #print(dec)
 
